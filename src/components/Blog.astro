@@ -1,0 +1,81 @@
+---
+const { title, date, time, author, tags, Content } = Astro.props
+import Layout from '../layouts/Layout.astro'
+
+---
+
+<Layout title="Welcome to Astro.">
+	<main>
+    <h1 class="post-title mb-4 text-3xl font-bold leading-tight">{title}</h1>
+    <div class="post-meta mb-8">
+      <div class="flex text-gray-700">
+        <div class="date mr-2">{new Date(date).toJSON().substr(0, 10)}, {time}</div>
+        <div class="author mr-2">by {author}</div>
+      </div>
+      <div class="tags block mt-2">
+        {tags.split(', ').map((tag) => (
+          <a class="m-1 bg-yellow-100 px-2 py-1 rounded-md" href="#">{tag}</a>
+        ))}
+      </div>
+    </div>
+    <div class="post-content">
+      <slot />
+    </div>
+	</main>
+</Layout>
+
+
+<style is:global>
+.post-content {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.post-content h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.post-content h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.post-content > p {
+  color: #2b2b2b;
+  padding-bottom: 16px;
+  margin-bottom: 0px;
+} 
+
+.post-content blockquote {
+  color: rgb(0, 150, 136);
+  margin: 20px 0px;
+  padding: 7px 15px;
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.post-content blockquote > p {
+  margin: 0px;
+}
+
+.post-content hr {
+  width: 75%;
+  border: 1px solid rgb(222, 222, 222);
+  margin: 35px auto;
+}
+
+.post-content a {
+  color: rgb(1, 139, 249);
+  text-decoration: underline;
+}
+
+.post-content img {
+  width: 100%;
+  border-radius: 7px;
+}
+
+</style>
