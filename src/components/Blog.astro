@@ -1,5 +1,5 @@
 ---
-const { title, date, time, author, tags, Content } = Astro.props
+const { title, date, time, author, tags, htmlContent } = Astro.props
 import Layout from '../layouts/Layout.astro'
 
 ---
@@ -18,9 +18,13 @@ import Layout from '../layouts/Layout.astro'
         ))}
       </div>
     </div>
-    <div class="post-content">
-      <slot />
-    </div>
+    {htmlContent ?
+      <div class="post-content" set:html={htmlContent}></div>
+    :
+      <div class="post-content">
+        <slot />
+      </div>
+    }
 	</main>
 </Layout>
 

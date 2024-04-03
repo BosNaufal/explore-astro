@@ -1,6 +1,6 @@
 ---
 title: Sebuah Judul Acrticle Yang Mungkin Sangat Bisa Panjang Sekali Untuk Kamu Yang Baru Memulai Untuk Membaca
-slug: example
+slug: example-blog
 author: Naufal Rabbani
 date: 2020-03-29
 time: "11:39"

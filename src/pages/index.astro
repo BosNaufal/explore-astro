@@ -1,9 +1,21 @@
 ---
+import PocketBase from 'pocketbase';
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
+import pbConnection from '../services/pbConnection.js'
+
+// you can also fetch all records at once via getFullList
+const records = await pbConnection.collection('posts').getFullList({
+    sort: '-created',
+});
 ---
 
 <Layout title="Welcome to Astro.">
+  {records.map((post) => (
+    <div>
+      <a class="text-blue-400 underline" href={`/article/${post.slug}`}>{post.title}</a>
+    </div>
+  ))}
 	<main>
 		<svg
 			class="astro-a"

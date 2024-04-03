@@ -1,0 +1,102 @@
+---
+import { marked } from 'marked';
+import sanitizeHTML from 'sanitize-html'
+import { getEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro'
+import Blog from '../../components/Blog.astro'
+import pbConnection from '../../services/pbConnection.js'
+
+export async function getStaticPaths({ paginate }) {
+  const allPosts = await pbConnection.collection('posts').getFullList({
+      sort: '-created',
+  });
+  // so that Astro knows which tag grouping the result is for.
+  // Make sure that you pass `{params: {tag}}` to `paginate()`
+  return allPosts.map(({ slug }) => {
+    return {
+      params: { slug },
+    }
+  })
+}
+
+// parmas from routes
+const { slug } = Astro.params;
+
+// Get a single entry from a collection.
+// Requires the name of the collection and either
+// the entry `slug` (content collections) or `id` (data collections)
+// const entry = await getEntry('article', slug);
+// const { Content, headings } = await entry.render();
+
+const record = await pbConnection.collection('posts').getFirstListItem(`slug="${slug}"`);
+
+const content = marked.parse(record.content);
+const safeContent = sanitizeHTML(content)
+---
+<Layout title="Welcome to Astro.">
+  <Blog 
+    title={record.title} 
+    date={record.published_at} 
+    time={'00:00'}
+    author="Naufal Rabbani" 
+    tags={record.tags} 
+    htmlContent={safeContent}
+  >
+  </Blog>
+</Layout>
+
+
+<style is:global>
+.post-content {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.post-content h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.post-content h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.post-content > p {
+  color: #2b2b2b;
+  padding-bottom: 16px;
+  margin-bottom: 0px;
+} 
+
+.post-content blockquote {
+  color: rgb(0, 150, 136);
+  margin: 20px 0px;
+  padding: 7px 15px;
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.post-content blockquote > p {
+  margin: 0px;
+}
+
+.post-content hr {
+  width: 75%;
+  border: 1px solid rgb(222, 222, 222);
+  margin: 35px auto;
+}
+
+.post-content a {
+  color: rgb(1, 139, 249);
+  text-decoration: underline;
+}
+
+.post-content img {
+  width: 100%;
+  border-radius: 7px;
+}
+
+</style>
